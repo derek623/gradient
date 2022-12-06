@@ -1,0 +1,32 @@
+Code Structure
+
+The go module is named "party-invite-ruiegv", following the structure of the codesubmit link. It consists of:
+- main.go which is the driver of the web server
+- api folder, which defines the api structure
+- pkg/customer_service folder, which is the package for providing the service of returning customer within 100km
+- pkg/util folder, which is the package for providing util functions that can be reused
+- pkg/greatCircle folder, which is the package for calculating the great circle distance
+
+How to build and run
+
+1) Run "go build ." to generate a binary, default name is party-invite-ruiegv.
+2) Type "./party-invite-ruiegv" to run the webserver with default parameters. Alternatively, you can simply run "go run ." at the root directory of the module. 
+The binary accepts 4 parameters:
+
+  -latitude float
+        Latitude of office (default 53.339428)
+  -logPath string
+        Path of log file (default "log.txt")
+  -longitude float
+        Longitude of office (default -6.257664)
+  -port string
+        Listening port (default "8081")
+
+3) A log file log.txt will be created on running the binary first time. On subsequent run, log messages will be appended to the same file.
+4) The end point for the customer service is /v1/customer, which "v1" is the version. You can run the below curl command to send a request to the web server
+
+curl -X PUT -F customerFile=@Data/customers.txt http://localhost:8081/v1/customer
+
+Note that the http request is a PUT request. I thought of using GET, but I did some research and there are many opinions against having a body in a GET request, so it is left with PUT or POST.
+This request is not creating new resource at the backend, so I decided to go with PUT request. Also, webserver uses the key "customerFile" to look for the uploaded file. 
+If this key is not used, the webserver cannot find the uploaded file.
